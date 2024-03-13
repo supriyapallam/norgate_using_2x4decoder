@@ -1,0 +1,39 @@
+//Design Code
+module dec2x4(output out0,out1,out2,out3,input in0,in1);
+  assign out0=(~in0)&(~in1);
+  assign out1=(~in0)&(in1);
+  assign out2=in0&(~in1);
+  assign out3=in0&in1;
+endmodule
+
+
+module nor_gate(output out,input a,b);
+  wire o1,o2,o3;
+  dec2x4 a1(out,o1,o2,o3,a,b);
+endmodule
+
+//Test Bench Code
+module tb();
+  wire out;
+  reg a,b;
+  nor_gate DUT(out,a,b);
+  initial
+    begin
+      integer i;
+      for(i=0;i<4;i=i+1)
+        begin
+          {a,b}=i;
+          #10;
+        end
+      $finish;
+    end
+  initial
+    begin
+      $monitor("a=%b,b=%b,out=%b",a,b,out);
+    end
+  initial
+    begin
+      $dumpfile("test.vcd");
+      $dumpvars(1);
+    end
+endmodule
